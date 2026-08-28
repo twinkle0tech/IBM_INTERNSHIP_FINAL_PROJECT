@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-const API_URL = "http://localhost:5000";
+const API_URL = "https://ibm-internship-final-project.onrender.com";
 
 
 function Courses() {
