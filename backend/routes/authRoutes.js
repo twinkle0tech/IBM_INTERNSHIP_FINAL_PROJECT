@@ -3,7 +3,8 @@ const express = require("express");
 const {
   registerUser,
   loginUser,
-  getProfile
+  getProfile,
+  updateProfile
 } = require("../controllers/authController");
 
 const protect = require("../middleware/authMiddleware");
@@ -19,6 +20,7 @@ router.post("/login", loginUser);
 // Protected route
 // The JWT middleware identifies the logged-in user.
 router.get("/profile", protect, getProfile);
+router.put("/profile", protect, updateProfile);
 
 
 module.exports = router;

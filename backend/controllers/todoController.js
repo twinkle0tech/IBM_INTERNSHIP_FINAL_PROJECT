@@ -63,9 +63,7 @@ const createTodo = async (req, res) => {
 
   try {
 
-    const {
-      title
-    } = req.body;
+    const { title, subject = "", priority = "Medium" } = req.body;
 
 
     if (!title || !title.trim()) {
@@ -85,6 +83,10 @@ const createTodo = async (req, res) => {
 
         title:
           title.trim(),
+
+        subject: subject.trim(),
+
+        priority,
 
         completed: false
 
@@ -132,9 +134,7 @@ const updateTodo = async (req, res) => {
     } = req.params;
 
 
-    const {
-      title
-    } = req.body;
+    const { title, subject = "", priority = "Medium" } = req.body;
 
 
     if (!isValidId(id)) {
@@ -176,6 +176,10 @@ const updateTodo = async (req, res) => {
 
     todo.title =
       title.trim();
+
+    todo.subject = subject.trim();
+
+    todo.priority = priority;
 
 
     await todo.save();

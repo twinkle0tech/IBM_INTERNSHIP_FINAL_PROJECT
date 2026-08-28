@@ -15,6 +15,18 @@ const todoSchema = new mongoose.Schema(
       trim: true
     },
 
+    subject: {
+      type: String,
+      trim: true,
+      default: ""
+    },
+
+    priority: {
+      type: String,
+      enum: ["Low", "Medium", "High"],
+      default: "Medium"
+    },
+
     completed: {
       type: Boolean,
       default: false

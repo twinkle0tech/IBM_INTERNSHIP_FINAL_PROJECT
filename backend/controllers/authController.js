@@ -15,7 +15,8 @@ const createToken = (userId) => {
 const userResponse = (user) => ({
   id: user._id,
   name: user.name,
-  email: user.email
+  email: user.email,
+  profileImage: user.profileImage || ""
 });
 
 
@@ -173,8 +174,63 @@ const getProfile = async (req, res) => {
 };
 
 
+const updateProfile = async (req, res) => {
+  try {
+    const { name, email, password, profileImage } = req.body;
+    const trimmedName = typeof name === "string" ? name.trim() : "";
+    const normalizedEmail = typeof email === "string" ? email.trim().toLowerCase() : "";
+
+    if (!trimmedName || !normalizedEmail) {
+      return res.status(400).json({ message: "Name and email are required" });
+    }
+
+    if (password && password.length < 6) {
+      return res.status(400).json({ message: "Password must be at least 6 characters" });
+    }
+
+    const emailOwner = await User.findOne({
+      email: normalizedEmail,
+      _id: { $ne: req.user }
+    });
+
+    if (emailOwner) {
+      return res.status(400).json({ message: "That email is already in use" });
+    }
+
+    const updates = {
+      name: trimmedName,
+      email: normalizedEmail,
+      profileImage: typeof profileImage === "string" ? profileImage : ""
+    };
+
+    if (password) {
+      updates.password = await bcrypt.hash(password, 10);
+    }
+
+    const user = await User.findByIdAndUpdate(
+      req.user,
+      updates,
+      { new: true, runValidators: true }
+    );
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    return res.json({
+      message: "Profile updated successfully",
+      user: userResponse(user)
+    });
+  } catch (error) {
+    console.error("Profile update error:", error);
+    return res.status(500).json({ message: "Server error" });
+  }
+};
+
+
 module.exports = {
   registerUser,
   loginUser,
-  getProfile
+  getProfile,
+  updateProfile
 };

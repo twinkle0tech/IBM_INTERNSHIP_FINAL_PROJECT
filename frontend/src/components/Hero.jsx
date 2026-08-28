@@ -36,7 +36,24 @@ function Hero({
       }
     ).toUpperCase();
 
+  // ========================================
+  // DYNAMIC GREETING
+  // ========================================
 
+  const getGreeting = () => {
+    const hour = new Date().getHours();
+
+    if (hour < 12) {
+      return "Good morning";
+    } else if (hour < 17) {
+      return "Good afternoon";
+    } else {
+      return "Good evening";
+    }
+  };
+
+
+    
   // ========================================
   // GET SUBJECTS FROM MONGODB
   // ========================================
@@ -269,7 +286,7 @@ function Hero({
 
 
           <h1>
-            Good morning, {userName} 👋
+            {getGreeting()}, {userName} ◝(ᵔᵕᵔ)◜✰
           </h1>
 
 
@@ -277,20 +294,6 @@ function Hero({
             Stay focused and keep making
             progress toward your goals.
           </p>
-
-        </div>
-
-
-        {/* SEARCH */}
-
-        <div className="search-box">
-
-          🔍
-
-          <input
-            type="text"
-            placeholder="Search..."
-          />
 
         </div>
 

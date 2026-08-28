@@ -98,6 +98,38 @@ function ItemList() {
     return data;
   };
 
+  const apiDelete = async (endpoint) => {
+    const token = getToken();
+
+    if (!token) {
+      throw new Error("Please log in again.");
+    }
+
+    const response = await fetch(API_URL + endpoint, {
+      method: "DELETE",
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    });
+
+    if (response.status === 401) {
+      handleUnauthorized();
+      throw new Error(
+        "Your session has expired. Please log in again."
+      );
+    }
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(
+        data.message || "Unable to delete the todo."
+      );
+    }
+
+    return data;
+  };
+
   // ========================================
   // DATE HELPERS
   // ========================================
@@ -322,6 +354,23 @@ function ItemList() {
         todo.status !== "done"
     );
   }, [todos]);
+
+  // The dashboard priority card intentionally excludes Low priority tasks.
+  // Keep the complete todo collection for the Todo List page itself.
+  const dashboardPriorities = useMemo(() => {
+    const priorityRank = { High: 0, Medium: 1 };
+
+    return pendingTodos
+      .filter((todo) => {
+        const priority = String(todo.priority || "Medium");
+        return priority === "High" || priority === "Medium";
+      })
+      .sort((first, second) => {
+        const firstPriority = String(first.priority || "Medium");
+        const secondPriority = String(second.priority || "Medium");
+        return priorityRank[firstPriority] - priorityRank[secondPriority];
+      });
+  }, [pendingTodos]);
 
   const upcomingAssignments = useMemo(() => {
     return assignments
@@ -582,93 +631,112 @@ function ItemList() {
     }
   };
 
-  // ========================================
-  // STUDY ACTIVITY
-  // ========================================
-
-  const weeklyActivity = useMemo(() => {
-    const days = [];
-
-    const current = new Date();
-
-    current.setHours(
-      0,
-      0,
-      0,
-      0
-    );
-
-    // Monday -> Sunday
-    const dayOfWeek = current.getDay();
-
-    const mondayOffset =
-      dayOfWeek === 0
-        ? -6
-        : 1 - dayOfWeek;
-
-    const monday = new Date(current);
-
-    monday.setDate(
-      current.getDate() +
-      mondayOffset
-    );
-
-    for (let index = 0; index < 7; index += 1) {
-      const date = new Date(monday);
-
-      date.setDate(
-        monday.getDate() +
-        index
-      );
-
-      const key = getDateKey(date);
-
-      const minutes = schedules
-        .filter((item) => {
-          const itemDate =
-            item.date ||
-            item.scheduledDate ||
-            item.studyDate;
-
-          return getDateKey(itemDate) === key;
-        })
-        .reduce(
-          (total, item) =>
-            total +
-            (Number(item.duration) || 0),
-          0
-        );
-
-      days.push({
-        label: date.toLocaleDateString(
-          "en-US",
-          {
-            weekday: "short",
-          }
-        ),
-        minutes,
-        date: key,
-      });
+  const handleDeleteTodo = async (todo) => {
+    if (!window.confirm("Delete \"" + todo.title + "\"?")) {
+      return;
     }
 
-    return days;
-  }, [schedules]);
+    try {
+      setError("");
 
-  const totalWeeklyMinutes =
-    weeklyActivity.reduce(
-      (total, day) =>
-        total + day.minutes,
-      0
+      await apiDelete("/api/todos/" + todo._id);
+
+      setTodos((currentTodos) =>
+        currentTodos.filter(
+          (item) => item._id !== todo._id
+        )
+      );
+    } catch (err) {
+      console.error("Todo delete error:", err);
+
+      setError(
+        err.message ||
+        "Unable to delete todo."
+      );
+    }
+  };
+
+  // ========================================
+// STUDY ACTIVITY
+// Total duration of schedules for each day
+// ========================================
+
+const weeklyActivity = useMemo(() => {
+  const days = [];
+
+  const current = new Date();
+
+  current.setHours(0, 0, 0, 0);
+
+  // Find Monday of the current week
+  const dayOfWeek = current.getDay();
+
+  const mondayOffset =
+    dayOfWeek === 0
+      ? -6
+      : 1 - dayOfWeek;
+
+  const monday = new Date(current);
+
+  monday.setDate(
+    current.getDate() + mondayOffset
+  );
+
+  // Monday → Sunday
+  for (let index = 0; index < 7; index += 1) {
+    const date = new Date(monday);
+
+    date.setDate(
+      monday.getDate() + index
     );
 
-  const maxActivity =
-    Math.max(
-      ...weeklyActivity.map(
-        (day) => day.minutes
+    const key = getDateKey(date);
+
+    // Add the duration of EVERY schedule
+    // created for this date.
+    const minutes = schedules
+      .filter((schedule) => {
+        return getDateKey(schedule.date) === key;
+      })
+      .reduce((total, schedule) => {
+        return (
+          total +
+          (Number(schedule.duration) || 0)
+        );
+      }, 0);
+
+    days.push({
+      label: date.toLocaleDateString(
+        "en-US",
+        {
+          weekday: "short",
+        }
       ),
-      1
-    );
 
+      date: key,
+
+      minutes,
+    });
+  }
+
+  return days;
+}, [schedules]);
+
+const totalWeeklyMinutes =
+  weeklyActivity.reduce(
+    (total, day) =>
+      total + day.minutes,
+    0
+  );
+
+const maxActivity =
+  Math.max(
+    ...weeklyActivity.map(
+      (day) => day.minutes
+    ),
+    1
+  );
+  
   // ========================================
   // RENDER
   // ========================================
@@ -876,14 +944,14 @@ function ItemList() {
             )}
 
             {!loading &&
-              pendingTodos.length === 0 && (
+              dashboardPriorities.length === 0 && (
                 <div className="home-dashboard-message">
                   You have no pending priorities.
                 </div>
               )}
 
             {!loading &&
-              pendingTodos
+              dashboardPriorities
                 .slice(0, 5)
                 .map((todo) => (
                   <label
@@ -1068,7 +1136,7 @@ function ItemList() {
             </button>
           </div>
 
-          <div className="priority-list">
+          <div className="todo-list">
             {loading && (
               <div className="home-todo-message">
                 Loading todo list...
@@ -1076,7 +1144,7 @@ function ItemList() {
             )}
 
             {!loading &&
-              pendingTodos.length === 0 && (
+              todos.length === 0 && (
                 <div className="home-todo-empty">
                   <h3>
                     Your todo list is empty.
@@ -1089,34 +1157,87 @@ function ItemList() {
               )}
 
             {!loading &&
-              pendingTodos
-                .slice(0, 5)
+              todos
                 .map((todo) => (
-                  <label
+                  <article
                     className={
                       todo.completed
-                        ? "priority-item completed"
-                        : "priority-item"
+                        ? "todo-item completed"
+                        : "todo-item"
                     }
                     key={todo._id}
                   >
-                    <input
-                      type="checkbox"
-                      checked={
+                    <button
+                      type="button"
+                      className={
                         todo.completed === true
+                          ? "todo-checkbox checked"
+                          : "todo-checkbox"
                       }
-                      onChange={() =>
+                      onClick={() =>
                         handleToggleTodo(todo)
                       }
-                    />
+                      aria-label={
+                        todo.completed
+                          ? "Mark incomplete"
+                          : "Mark complete"
+                      }
+                    >
+                      {todo.completed ? "✓" : ""}
+                    </button>
 
-                    <span>
-                      {todo.title ||
-                        todo.text ||
-                        todo.name ||
-                        "Todo"}
-                    </span>
-                  </label>
+                    <div className="todo-content">
+                      <div className="todo-title-row">
+                        <h2>
+                          {todo.title ||
+                            todo.text ||
+                            todo.name ||
+                            "Todo"}
+                        </h2>
+
+                        <span
+                          className={
+                            "todo-priority " +
+                            String(
+                              todo.priority || "Medium"
+                            ).toLowerCase()
+                          }
+                        >
+                          {todo.priority || "Medium"}
+                        </span>
+                      </div>
+
+                      <p>
+                        {todo.subject ||
+                          todo.course ||
+                          "No course selected"}
+                      </p>
+                    </div>
+
+                    <div className="todo-actions">
+                      <button
+                        type="button"
+                        className="todo-edit-button"
+                        onClick={() =>
+                          handleToggleTodo(todo)
+                        }
+                      >
+                        {todo.completed
+                          ? "Undo"
+                          : "Complete"}
+                      </button>
+
+                      <button
+                        type="button"
+                        className="todo-delete-button"
+                        onClick={() =>
+                          handleDeleteTodo(todo)
+                        }
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  </article>
                 ))}
           </div>
         </section>

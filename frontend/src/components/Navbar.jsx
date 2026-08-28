@@ -5,7 +5,6 @@ function Navbar({
   onLogout
 }) {
 
-  // Get first letter from actual user name
   const firstLetter =
     user?.name
       ?.charAt(0)
@@ -42,8 +41,7 @@ function Navbar({
       path: "/exams",
       icon: "▥",
       label: "Exams"
-    },
-    
+    }
   ];
 
 
@@ -59,15 +57,31 @@ function Navbar({
 
 
   return (
+
     <aside className="sidebar">
 
-      {/* USER PROFILE */}
+      {/* ==================================
+          USER PROFILE
+      ================================== */}
 
       <div className="profile">
 
-        <div className="profile-avatar">
-          {firstLetter}
-        </div>
+        {user?.profileImage ? (
+
+          <img
+            src={user.profileImage}
+            alt="Profile"
+            className="profile-avatar profile-avatar-image"
+          />
+
+        ) : (
+
+          <div className="profile-avatar">
+            {firstLetter}
+          </div>
+
+        )}
+
 
         <div>
 
@@ -84,7 +98,9 @@ function Navbar({
       </div>
 
 
-      {/* NAVIGATION */}
+      {/* ==================================
+          NAVIGATION
+      ================================== */}
 
       <nav className="side-nav">
 
@@ -123,11 +139,14 @@ function Navbar({
               {item.label}
 
             </a>
+
           )
         )}
 
 
-        {/* ACCOUNT */}
+        {/* ==================================
+            ACCOUNT
+        ================================== */}
 
         <p className="nav-title bottom-title">
           ACCOUNT
@@ -153,12 +172,14 @@ function Navbar({
             ⚙
           </span>
 
-          Settings
+          Profile
 
         </a>
 
 
-        {/* DARK MODE */}
+        {/* ==================================
+            DARK MODE
+        ================================== */}
 
         <button
           type="button"
@@ -179,7 +200,9 @@ function Navbar({
         </button>
 
 
-        {/* LOGOUT */}
+        {/* ==================================
+            LOGOUT
+        ================================== */}
 
         <button
           type="button"
@@ -200,6 +223,5 @@ function Navbar({
     </aside>
   );
 }
-
 
 export default Navbar;

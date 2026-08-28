@@ -12,7 +12,6 @@ import Schedule from "./pages/Schedule";
 import Assignments from "./pages/Assignments";
 import TodoList from "./pages/TodoList";
 import Exams from "./pages/Exams";
-import Goals from "./pages/Goals";
 import Settings from "./pages/Settings";
 
 import "./App.css";
@@ -58,7 +57,8 @@ const getPath = () => {
 
 function Dashboard({
   user,
-  onLogout
+  onLogout,
+  onUserUpdate
 }) {
 
   const [path, setPath] = useState(
@@ -108,7 +108,6 @@ function Dashboard({
   };
 
 
-  // Decide which page to display
   const renderPage = () => {
 
     switch (path) {
@@ -123,13 +122,14 @@ function Dashboard({
         return <Assignments />;
 
       case "/todo":
+      case "/todos":
         return <TodoList />;
 
       case "/exams":
         return <Exams />;
 
       case "/settings":
-        return <Settings />;
+        return <Settings user={user} onUserUpdate={onUserUpdate} />;
 
       case "/home":
       case "/":
@@ -404,6 +404,7 @@ function App() {
     <Dashboard
       user={user}
       onLogout={handleLogout}
+      onUserUpdate={setUser}
     />
   );
 }

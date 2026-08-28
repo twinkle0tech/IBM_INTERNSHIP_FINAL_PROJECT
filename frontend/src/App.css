@@ -180,27 +180,6 @@ button {
   font-size: 14px;
 }
 
-.search-box {
-  width: 240px;
-  height: 42px;
-  background: white;
-  border: 1px solid #e5e5e5;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 0 13px;
-  color: #999999;
-}
-
-.search-box input {
-  border: none;
-  outline: none;
-  width: 100%;
-  font-size: 13px;
-}
-
-
 /* =========================
    SECTION HEADINGS
 ========================= */
@@ -507,19 +486,31 @@ button {
   min-height: 310px;
 }
 
+/* Header */
 .calendar-arrows {
   display: flex;
-  gap: 5px;
+  gap: 6px;
 }
 
 .calendar-arrows button {
-  width: 28px;
-  height: 28px;
+  width: 36px;
+  height: 36px;
   background: #f5f5f3;
   border: none;
-  border-radius: 5px;
-  font-size: 17px;
+  border-radius: 7px;
+  font-size: 18px;
+  cursor: pointer;
+  color: #111;
 }
+
+.calendar-arrows button:hover {
+  background: #eeeeec;
+}
+
+
+/* =========================
+   CALENDAR GRID
+========================= */
 
 .calendar-header,
 .calendar-days {
@@ -534,43 +525,145 @@ button {
 }
 
 .calendar-header span {
-  font-size: 10px;
-  color: #999999;
+  font-size: 12px;
+  color: #888;
 }
+
+
+/* =========================
+   DATE AREA
+========================= */
 
 .calendar-days {
-  gap: 6px;
+  row-gap: 6px;
+  column-gap: 0;
 }
 
+
+/* IMPORTANT:
+   Remove all boxes/borders
+*/
+
 .calendar-days span {
-  height: 31px;
+  height: 34px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 11px;
-  border-radius: 5px;
+
+  font-size: 13px;
+  color: #111;
+
+  background: transparent;
+  border: none;
+  outline: none;
+  box-shadow: none;
+
+  border-radius: 6px;
   position: relative;
+
+  cursor: pointer;
 }
+
+
+/* Empty calendar cells */
 
 .calendar-days .empty {
   background: transparent;
+  border: none;
 }
 
+
+/* =========================
+   TODAY
+========================= */
+
 .calendar-days .today {
-  background: #222222;
-  color: white;
+  background: #222;
+  color: #fff;
+
+  border: none;
+  outline: none;
+  box-shadow: none;
 }
+
+
+/* =========================
+   DAYS WITH TASKS
+========================= */
 
 .calendar-days .has-task::after {
   content: "";
-  width: 4px;
-  height: 4px;
-  background: #555555;
+
+  width: 5px;
+  height: 5px;
+
+  background: #555;
+
   border-radius: 50%;
+
   position: absolute;
-  bottom: 3px;
+  bottom: 2px;
 }
 
+
+/* =========================
+   HOVER
+========================= */
+
+.calendar-days span:not(.empty):not(.today):hover {
+  background: #f5f5f3;
+}
+
+
+/* =========================
+   REMOVE BUTTON DEFAULT
+   BROWSER STYLING
+========================= */
+
+.calendar-days button {
+  appearance: none;
+  -webkit-appearance: none;
+
+  background: transparent;
+  border: none;
+  outline: none;
+  box-shadow: none;
+
+  padding: 0;
+  margin: 0;
+
+  font: inherit;
+  color: inherit;
+
+  width: 100%;
+  height: 34px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 6px;
+
+  cursor: pointer;
+}
+
+
+/* Today button */
+
+.calendar-days button.today {
+  background: #222;
+  color: #fff;
+
+  border: none;
+  box-shadow: none;
+}
+
+
+/* Hover on date buttons */
+
+.calendar-days button:not(.today):hover {
+  background: #f5f5f3;
+}
 
 /* =========================
    NOTES
@@ -695,10 +788,19 @@ button {
 
 .bar {
   width: 28px;
+  height: 100%;
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.activity-bar-fill {
+  width: 28px;
   background: #333333;
   border-radius: 4px 4px 0 0;
-  position: relative;
-  min-height: 15px;
+  min-height: 0;
+  transition: height 0.3s ease;
 }
 
 .bar span {
@@ -760,12 +862,7 @@ button {
     align-items: flex-start;
     gap: 20px;
   }
-
-  .search-box {
-    width: 100%;
-  }
-
-  .schedule-item {
+.schedule-item {
     grid-template-columns: 75px 20px 1fr;
   }
 
@@ -779,6 +876,305 @@ button {
 }
 
 
+
+/* =========================
+   PROFILE / SETTINGS
+========================= */
+
+.settings-page {
+  max-width: 1160px;
+  margin: 0 auto;
+}
+
+.account-panel {
+  background: #f2f2f0;
+  border: 1px solid #e3e3e1;
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 18px 35px rgba(22, 22, 22, 0.08);
+}
+
+.account-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 18px 22px 16px;
+  border-bottom: 1px solid #e3e3e1;
+  background: rgba(255, 255, 255, 0.35);
+}
+
+.icon-button {
+  width: 42px;
+  height: 42px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #dfe0df;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.65);
+  color: #222222;
+  font-size: 34px;
+  line-height: 1;
+  padding: 0;
+}
+
+.account-header-user {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-weight: 600;
+  color: #202020;
+}
+
+.header-avatar,
+.profile-picture {
+  border-radius: 50%;
+  background: #000000;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.header-avatar {
+  width: 32px;
+  height: 32px;
+  font-size: 12px;
+}
+
+.profile-avatar-image {
+  object-fit: cover;
+}
+
+.header-name {
+  font-size: 17px;
+}
+
+.account-body {
+  display: grid;
+  grid-template-columns: 240px minmax(0, 1fr);
+  min-height: 560px;
+}
+
+.account-sidebar {
+  background: rgba(255, 255, 255, 0.25);
+  border-right: 1px solid #e3e3e1;
+  padding: 16px 14px;
+}
+
+.sidebar-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.side-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 12px 12px;
+  border: none;
+  background: rgba(255, 255, 255, 0);
+  border-radius: 10px;
+  color: #4b4b4b;
+  font-size: 14px;
+  text-align: left;
+}
+
+.side-link.active {
+  background: rgba(0, 0, 0, 0.04);
+  color: #1e1e1e;
+  font-weight: 600;
+}
+
+.side-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  color: #575757;
+}
+
+.account-content {
+  padding: 26px 30px 20px;
+}
+
+.profile-section-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1f1f1f;
+  margin-bottom: 18px;
+}
+
+.profile-picture-row {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-bottom: 22px;
+}
+
+.profile-picture {
+  width: 74px;
+  height: 74px;
+  font-size: 24px;
+  background: #000000;
+}
+
+.file-input {
+  display: none;
+}
+
+.profile-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.primary-action,
+.inline-button,
+.cancel-button,
+.save-button {
+  border-radius: 10px;
+  font-size: 13px;
+  transition: 0.2s ease;
+}
+
+.upload-btn {
+  border: 1px solid #d9d9d9;
+  background: #efefef;
+  color: #202020;
+  padding: 9px 14px;
+}
+
+.text-action {
+  background: transparent;
+  border: none;
+  color: #4d4d4d;
+  font-size: 13px;
+}
+
+.split-fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+  margin-bottom: 18px;
+}
+
+.field-group {
+  margin-bottom: 18px;
+}
+
+.field-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #3a3a3a;
+}
+
+.field-group input {
+  width: 100%;
+  height: 42px;
+  background: rgba(255, 255, 255, 0.5);
+  border: 1px solid #dfe1e2;
+  border-radius: 8px;
+  padding: 0 12px;
+  font-size: 14px;
+  color: #1f1f1f;
+}
+
+.input-button-wrap {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.input-button-wrap input {
+  flex: 1;
+}
+
+.inline-button {
+  border: 1px solid #dfe1e2;
+  background: rgba(255, 255, 255, 0.6);
+  color: #2e2e2e;
+  padding: 10px 14px;
+  white-space: nowrap;
+}
+
+.form-footer {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 14px;
+  margin-top: 26px;
+  padding-top: 12px;
+}
+
+.account-panel .cancel-button,
+.account-panel .save-button {
+  border: none;
+  padding: 12px 22px;
+  font-weight: 600;
+}
+
+.account-panel .cancel-button {
+  background: #f1f1f1;
+  color: #323232;
+  border: 1px solid #e2e2e2;
+}
+
+.account-panel .save-button {
+  background: linear-gradient(135deg, #d12d2d, #c51a1a);
+  color: white;
+  border-radius: 18px;
+  min-width: 120px;
+  box-shadow: 0 8px 20px rgba(201, 27, 27, 0.22);
+}
+
+.account-panel button:disabled {
+  cursor: not-allowed;
+  opacity: 0.65;
+}
+
+.settings-message {
+  margin-top: 4px;
+  font-size: 13px;
+}
+
+.settings-error {
+  color: #b42318;
+}
+
+.settings-success {
+  color: #167044;
+}
+
+@media (max-width: 860px) {
+  .account-body {
+    grid-template-columns: 1fr;
+  }
+
+  .account-sidebar {
+    border-right: none;
+    border-bottom: 1px solid #e3e3e1;
+  }
+
+  .split-fields {
+    grid-template-columns: 1fr;
+  }
+
+  .input-button-wrap {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .input-button-wrap input {
+    flex: none;
+  }
+}
 
 /* =========================
    AUTHENTICATION
@@ -3659,4 +4055,1373 @@ button {
   .exam-form-card {
     padding: 18px;
   }
+}
+
+
+/* =========================================================
+   TODO LIST PAGE
+========================================================= */
+
+.todos-page {
+  width: 100%;
+  max-width: 1145px;
+  margin: 0 auto;
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.todos-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+
+  gap: 30px;
+
+  margin-bottom: 28px;
+}
+
+.todos-header .small-heading {
+  margin: 0 0 8px;
+
+  color: #888;
+
+  font-size: 11px;
+  font-weight: 600;
+
+  letter-spacing: 2px;
+}
+
+.todos-header h1 {
+  margin: 0;
+
+  color: #171717;
+
+  font-size: 36px;
+  line-height: 1.1;
+
+  font-weight: 600;
+
+  letter-spacing: -1.4px;
+}
+
+.todos-header > div > p:last-child {
+  margin: 9px 0 0;
+
+  color: #777;
+
+  font-size: 14px;
+}
+
+
+/* =========================================================
+   ADD BUTTON
+========================================================= */
+
+.todos-header .add-button,
+.todo-empty .add-button {
+  min-height: 40px;
+
+  padding: 0 18px;
+
+  border: 0;
+  border-radius: 8px;
+
+  background: #222;
+  color: #fff;
+
+  font-family: inherit;
+  font-size: 13px;
+
+  cursor: pointer;
+}
+
+.todos-header .add-button:hover,
+.todo-empty .add-button:hover {
+  background: #111;
+}
+
+
+/* =========================================================
+   MESSAGES
+========================================================= */
+
+.todo-error,
+.todo-success {
+  margin-bottom: 18px;
+
+  padding: 13px 16px;
+
+  border-radius: 8px;
+
+  font-size: 13px;
+}
+
+.todo-error {
+  border: 1px solid #ecd0d0;
+
+  background: #fff5f5;
+
+  color: #a13b3b;
+}
+
+.todo-success {
+  border: 1px solid #d4e4d4;
+
+  background: #f4faf4;
+
+  color: #477247;
+}
+
+
+/* =========================================================
+   FORM
+========================================================= */
+
+.todo-form-card {
+  margin-bottom: 20px;
+
+  padding: 24px;
+
+  background: #fff;
+
+  border: 1px solid #e0e0e0;
+
+  border-radius: 10px;
+}
+
+.todo-form-header {
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  margin-bottom: 20px;
+}
+
+.todo-form-header h2 {
+  margin: 0;
+
+  color: #222;
+
+  font-size: 20px;
+
+  font-weight: 600;
+}
+
+.todo-close-button {
+  width: 32px;
+  height: 32px;
+
+  border: 0;
+
+  border-radius: 7px;
+
+  background: #f3f3f1;
+
+  color: #555;
+
+  font-size: 20px;
+
+  cursor: pointer;
+}
+
+.todo-close-button:hover {
+  background: #e8e8e6;
+}
+
+.todo-form-grid {
+  display: grid;
+
+  grid-template-columns:
+    minmax(0, 1fr)
+    220px;
+
+  gap: 18px;
+
+  margin-bottom: 17px;
+}
+
+.todo-field label {
+  display: block;
+
+  margin-bottom: 7px;
+
+  color: #444;
+
+  font-size: 12px;
+
+  font-weight: 600;
+}
+
+.todo-field input,
+.todo-field select,
+.todo-field textarea {
+  width: 100%;
+
+  box-sizing: border-box;
+
+  padding: 10px 12px;
+
+  border: 1px solid #ddd;
+
+  border-radius: 7px;
+
+  background: #fff;
+
+  color: #222;
+
+  font-family: inherit;
+
+  font-size: 13px;
+
+  outline: none;
+}
+
+.todo-field input,
+.todo-field select {
+  height: 42px;
+}
+
+.todo-field textarea {
+  min-height: 100px;
+
+  resize: vertical;
+}
+
+.todo-field input:focus,
+.todo-field select:focus,
+.todo-field textarea:focus {
+  border-color: #999;
+}
+
+.todo-form-actions {
+  display: flex;
+
+  justify-content: flex-end;
+
+  gap: 10px;
+
+  margin-top: 20px;
+}
+
+.todo-cancel-button,
+.todo-save-button {
+  min-height: 38px;
+
+  padding: 0 17px;
+
+  border-radius: 7px;
+
+  font-family: inherit;
+
+  font-size: 12px;
+
+  cursor: pointer;
+}
+
+.todo-cancel-button {
+  border: 1px solid #ddd;
+
+  background: #fff;
+
+  color: #555;
+}
+
+.todo-save-button {
+  border: 1px solid #222;
+
+  background: #222;
+
+  color: #fff;
+}
+
+.todo-save-button:hover {
+  background: #111;
+}
+
+
+/* =========================================================
+   STAT CARDS
+========================================================= */
+
+.todo-stats {
+  display: grid;
+
+  grid-template-columns:
+    repeat(4, minmax(0, 1fr));
+
+  gap: 14px;
+
+  margin-bottom: 20px;
+}
+
+.todo-stat {
+  min-height: 91px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  justify-content: center;
+
+  padding: 17px 20px;
+
+  background: #fff;
+
+  border: 1px solid #e1e1e1;
+
+  border-radius: 9px;
+}
+
+.todo-stat span {
+  margin-bottom: 8px;
+
+  color: #888;
+
+  font-size: 12px;
+}
+
+.todo-stat strong {
+  color: #222;
+
+  font-size: 25px;
+
+  line-height: 1;
+
+  font-weight: 600;
+}
+
+
+/* =========================================================
+   FILTERS
+========================================================= */
+
+.todo-filter-card {
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+
+  gap: 18px;
+
+  margin-bottom: 20px;
+
+  padding: 20px;
+
+  background: #fff;
+
+  border: 1px solid #e1e1e1;
+
+  border-radius: 10px;
+}
+
+.todo-filter label {
+  display: block;
+
+  margin-bottom: 7px;
+
+  color: #444;
+
+  font-size: 12px;
+
+  font-weight: 600;
+}
+
+.todo-filter select {
+  width: 100%;
+
+  height: 42px;
+
+  padding: 0 11px;
+
+  border: 1px solid #ddd;
+
+  border-radius: 7px;
+
+  background: #fff;
+
+  color: #333;
+
+  font-family: inherit;
+
+  font-size: 13px;
+
+  outline: none;
+}
+
+.todo-filter select:focus {
+  border-color: #999;
+}
+
+
+/* =========================================================
+   TODO LIST
+========================================================= */
+
+.todo-list {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 12px;
+}
+
+.todo-item {
+  min-height: 91px;
+
+  display: grid;
+
+  grid-template-columns:
+    38px
+    minmax(0, 1fr)
+    auto;
+
+  align-items: center;
+
+  gap: 17px;
+
+  padding: 17px 20px;
+
+  background: #fff;
+
+  border: 1px solid #e1e1e1;
+
+  border-radius: 10px;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.todo-item:hover {
+  border-color: #d3d3d3;
+
+  box-shadow:
+    0 3px 12px rgba(
+      0,
+      0,
+      0,
+      0.035
+    );
+}
+
+.todo-item.completed {
+  opacity: 0.65;
+}
+
+
+/* =========================================================
+   CHECKBOX
+========================================================= */
+
+.todo-checkbox {
+  width: 28px;
+  height: 28px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border: 1px solid #ccc;
+
+  border-radius: 50%;
+
+  background: #fff;
+
+  color: #fff;
+
+  font-size: 14px;
+
+  cursor: pointer;
+}
+
+.todo-checkbox:hover {
+  border-color: #999;
+}
+
+.todo-checkbox.checked {
+  border-color: #222;
+
+  background: #222;
+
+  color: #fff;
+}
+
+
+/* =========================================================
+   CONTENT
+========================================================= */
+
+.todo-content {
+  min-width: 0;
+}
+
+.todo-title-row {
+  display: flex;
+
+  align-items: center;
+
+  flex-wrap: wrap;
+
+  gap: 9px;
+}
+
+.todo-content h2 {
+  margin: 0;
+
+  color: #222;
+
+  font-size: 15px;
+
+  line-height: 1.35;
+
+  font-weight: 600;
+}
+
+.todo-item.completed
+.todo-content h2 {
+  text-decoration: line-through;
+}
+
+.todo-content p {
+  margin: 6px 0 0;
+
+  color: #777;
+
+  font-size: 12px;
+
+  line-height: 1.5;
+}
+
+
+/* =========================================================
+   PRIORITY
+========================================================= */
+
+.todo-priority {
+  display: inline-flex;
+
+  align-items: center;
+
+  min-height: 21px;
+
+  padding: 4px 9px;
+
+  border-radius: 20px;
+
+  font-size: 10px;
+
+  line-height: 1;
+
+  font-weight: 500;
+}
+
+.todo-priority.high {
+  background: #f8eaea;
+
+  color: #9b4a4a;
+}
+
+.todo-priority.medium {
+  background: #f5f0e4;
+
+  color: #806b3e;
+}
+
+.todo-priority.low {
+  background: #edf2ed;
+
+  color: #577257;
+}
+
+
+/* =========================================================
+   ACTIONS
+========================================================= */
+
+.todo-actions {
+  display: flex;
+
+  align-items: center;
+
+  gap: 14px;
+}
+
+.todo-edit-button,
+.todo-delete-button {
+  border: 0;
+
+  background: transparent;
+
+  font-family: inherit;
+
+  font-size: 12px;
+
+  cursor: pointer;
+}
+
+.todo-edit-button {
+  color: #333;
+}
+
+.todo-edit-button:hover {
+  text-decoration: underline;
+}
+
+.todo-delete-button {
+  color: #b65555;
+}
+
+.todo-delete-button:hover {
+  color: #aa4444;
+
+  text-decoration: underline;
+}
+
+
+/* =========================================================
+   EMPTY / LOADING
+========================================================= */
+
+.todo-empty,
+.todo-loading {
+  padding: 55px 30px;
+
+  background: #fff;
+
+  border: 1px solid #e1e1e1;
+
+  border-radius: 10px;
+
+  text-align: center;
+}
+
+.todo-loading {
+  color: #888;
+
+  font-size: 13px;
+}
+
+.todo-empty h2 {
+  margin: 0 0 8px;
+
+  color: #333;
+
+  font-size: 18px;
+
+  font-weight: 600;
+}
+
+.todo-empty p {
+  margin: 0 auto 20px;
+
+  color: #888;
+
+  font-size: 13px;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 900px) {
+  .todo-stats {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+
+  .todo-item {
+    grid-template-columns:
+      38px
+      minmax(0, 1fr);
+  }
+
+  .todo-actions {
+    grid-column: 2;
+
+    justify-content: flex-start;
+  }
+}
+
+
+@media (max-width: 700px) {
+  .todos-header {
+    flex-direction: column;
+
+    align-items: flex-start;
+  }
+
+  .todo-form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .todo-filter-card {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+@media (max-width: 520px) {
+  .todos-header h1 {
+    font-size: 30px;
+  }
+
+  .todo-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .todo-item {
+    grid-template-columns: 30px minmax(0, 1fr);
+
+    padding: 16px;
+  }
+
+  .todo-actions {
+    grid-column: 2;
+
+    flex-wrap: wrap;
+  }
+
+  .todo-form-card {
+    padding: 18px;
+  }
+}
+
+/* =========================================================
+   DASHBOARD EXAM COUNTDOWN
+========================================================= */
+
+.exam-countdown-card {
+  overflow: hidden;
+}
+
+.exam-countdown-list {
+  display: grid;
+
+  grid-template-columns:
+    repeat(4, minmax(0, 1fr));
+
+  gap: 10px;
+
+  margin-top: 20px;
+}
+
+.exam-mini-card {
+  min-width: 0;
+  min-height: 205px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  padding: 15px 10px;
+
+  background: #fff;
+
+  border: 1px solid #e5e5e5;
+
+  border-radius: 8px;
+
+  text-align: center;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.exam-mini-card:hover {
+  border-color: #d0d0d0;
+
+  box-shadow:
+    0 4px 14px
+    rgba(0, 0, 0, 0.04);
+}
+
+.exam-mini-card h3 {
+  width: 100%;
+
+  margin: 0;
+
+  overflow: hidden;
+
+  color: #222;
+
+  font-size: 13px;
+  line-height: 1.3;
+
+  font-weight: 600;
+
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.exam-mini-date {
+  margin-top: 5px;
+
+  color: #888;
+
+  font-size: 10px;
+}
+
+.exam-mini-subject {
+  width: 100%;
+
+  margin: 3px 0 0;
+
+  overflow: hidden;
+
+  color: #777;
+
+  font-size: 10px;
+
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.exam-mini-icon {
+  width: 42px;
+  height: 42px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin: 14px 0 10px;
+
+  border-radius: 50%;
+
+  background: #f5eeee;
+
+  color: #444;
+
+  font-size: 13px;
+
+  font-weight: 600;
+}
+
+.exam-mini-card strong {
+  color: #222;
+
+  font-size: 29px;
+
+  line-height: 1;
+
+  font-weight: 500;
+}
+
+.exam-mini-card > span:last-child {
+  margin-top: 5px;
+
+  color: #777;
+
+  font-size: 10px;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 1000px) {
+  .exam-countdown-list {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 600px) {
+  .exam-countdown-list {
+    grid-template-columns: 1fr;
+  }
+
+  .exam-mini-card {
+    min-height: 150px;
+  }
+}
+
+
+/* =========================================================
+   EXAM COUNTDOWN
+========================================================= */
+
+.exam-countdown-card {
+  width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.exam-countdown-header {
+  width: 100%;
+
+  display: flex;
+
+  align-items: flex-start;
+
+  justify-content: space-between;
+
+  gap: 20px;
+
+  margin-bottom: 24px;
+}
+
+.exam-countdown-header > div {
+  min-width: 0;
+}
+
+.exam-countdown-header h2 {
+  margin: 0;
+
+  color: #222;
+
+  font-size: 24px;
+
+  line-height: 1.2;
+
+  font-weight: 600;
+}
+
+.exam-countdown-header p {
+  margin: 6px 0 0;
+
+  color: #888;
+
+  font-size: 13px;
+}
+
+.exam-countdown-header .text-button {
+  flex-shrink: 0;
+
+  margin-top: 3px;
+
+  white-space: nowrap;
+}
+
+
+/* =========================================================
+   EXAM CARDS
+========================================================= */
+
+.exam-countdown-list {
+  width: 100%;
+
+  display: grid;
+
+  /*
+    IMPORTANT:
+    Three equal-size cards.
+  */
+
+  grid-template-columns:
+    repeat(3, minmax(0, 1fr));
+
+  gap: 16px;
+
+  box-sizing: border-box;
+}
+
+
+/* =========================================================
+   INDIVIDUAL CARD
+========================================================= */
+
+.exam-mini-card {
+  width: 100%;
+
+  min-width: 0;
+
+  min-height: 285px;
+
+  box-sizing: border-box;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  justify-content: flex-start;
+
+  padding: 22px 18px 20px;
+
+  background: #ffffff;
+
+  border: 1px solid #dedede;
+
+  border-radius: 10px;
+
+  text-align: center;
+}
+
+
+/* =========================================================
+   TITLE
+========================================================= */
+
+.exam-mini-top {
+  width: 100%;
+
+  min-height: 58px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  justify-content: flex-start;
+}
+
+.exam-mini-top h3 {
+  width: 100%;
+
+  margin: 0;
+
+  color: #222;
+
+  font-size: 17px;
+
+  line-height: 1.25;
+
+  font-weight: 600;
+
+  /*
+    Allow long names to wrap.
+  */
+
+  white-space: normal;
+
+  overflow-wrap: break-word;
+
+  word-break: normal;
+}
+
+.exam-mini-top p {
+  width: 100%;
+
+  margin: 7px 0 0;
+
+  color: #777;
+
+  font-size: 13px;
+
+  line-height: 1.3;
+
+  white-space: normal;
+
+  overflow-wrap: break-word;
+}
+
+
+/* =========================================================
+   DATE
+========================================================= */
+
+.exam-mini-date {
+  margin-top: 8px;
+
+  color: #888;
+
+  font-size: 12px;
+
+  line-height: 1.3;
+}
+
+
+/* =========================================================
+   PROGRESS CIRCLE
+========================================================= */
+
+.exam-progress {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  margin-top: 22px;
+}
+
+.exam-progress-circle {
+  width: 68px;
+
+  height: 68px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  box-sizing: border-box;
+
+  border: 2px solid #222;
+
+  border-radius: 50%;
+
+  background: #fafafa;
+}
+
+.exam-progress-circle span {
+  color: #222;
+
+  font-size: 12px;
+
+  font-weight: 600;
+}
+
+
+/* =========================================================
+   DAYS LEFT
+========================================================= */
+
+.exam-days {
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  justify-content: center;
+
+  margin-top: 18px;
+}
+
+.exam-days strong {
+  color: #222;
+
+  font-size: 38px;
+
+  line-height: 1;
+
+  font-weight: 400;
+
+  letter-spacing: -1px;
+}
+
+.exam-days span {
+  margin-top: 7px;
+
+  color: #777;
+
+  font-size: 11px;
+}
+
+
+/* =========================================================
+   EMPTY STATE
+========================================================= */
+
+.exam-empty-state {
+  width: 100%;
+
+  padding: 40px 20px;
+
+  box-sizing: border-box;
+
+  text-align: center;
+}
+
+.exam-empty-state h3 {
+  margin: 0;
+
+  color: #222;
+
+  font-size: 16px;
+}
+
+.exam-empty-state p {
+  margin: 7px 0 16px;
+
+  color: #777;
+
+  font-size: 13px;
+}
+
+
+/* =========================================================
+   LARGE SCREEN
+========================================================= */
+
+@media (min-width: 1200px) {
+
+  .exam-countdown-list {
+    grid-template-columns:
+      repeat(3, minmax(230px, 1fr));
+
+    gap: 18px;
+  }
+
+  .exam-mini-card {
+    min-height: 300px;
+
+    padding: 24px 22px;
+  }
+
+  .exam-mini-top h3 {
+    font-size: 18px;
+  }
+
+}
+
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 1000px) {
+
+  .exam-countdown-list {
+    grid-template-columns:
+      repeat(2, minmax(200px, 1fr));
+  }
+
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 650px) {
+
+  .exam-countdown-header {
+    flex-direction: column;
+
+    align-items: flex-start;
+  }
+
+  .exam-countdown-list {
+    grid-template-columns: 1fr;
+
+    gap: 14px;
+  }
+
+  .exam-mini-card {
+    min-height: 250px;
+  }
+
+}
+
+/* =========================
+   DARK MODE
+========================= */
+
+body.dark-mode {
+  background: #111111;
+  color: #ffffff;
+}
+
+/* Sidebar */
+body.dark-mode .sidebar {
+  background: #181818;
+  border-right-color: #333333;
+}
+
+/* Main content */
+body.dark-mode .main-content {
+  background: #111111;
+}
+
+/* Cards */
+body.dark-mode .course-card,
+body.dark-mode .dashboard-card,
+body.dark-mode .schedule-card,
+body.dark-mode .assignment-card,
+body.dark-mode .subject-card,
+body.dark-mode .form-card,
+body.dark-mode .placeholder-card,
+body.dark-mode .schedule-date-card,
+body.dark-mode .assignment-filters,
+body.dark-mode .assignment-stat,
+body.dark-mode .upcoming-card,
+body.dark-mode .empty-courses,
+body.dark-mode .schedule-empty,
+body.dark-mode .assignment-empty {
+  background: #181818;
+  border-color: #333333;
+  color: #ffffff;
+}
+
+/* Headings */
+body.dark-mode h1,
+body.dark-mode h2,
+body.dark-mode h3,
+body.dark-mode h4,
+body.dark-mode .welcome h1,
+body.dark-mode .section-heading h2 {
+  color: #ffffff;
+}
+
+/* Normal text */
+body.dark-mode .welcome-text,
+body.dark-mode .schedule-info p,
+body.dark-mode .assignment-subject,
+body.dark-mode .assignment-description,
+body.dark-mode .subject-description,
+body.dark-mode .course-card p,
+body.dark-mode .note-item p,
+body.dark-mode .section-heading p {
+  color: #aaaaaa;
+}
+
+/* Sidebar navigation */
+body.dark-mode .side-nav a,
+body.dark-mode .nav-link-button,
+body.dark-mode .logout-button {
+  color: #bbbbbb;
+}
+
+body.dark-mode .side-nav a:hover,
+body.dark-mode .nav-link-button:hover,
+body.dark-mode .logout-button:hover {
+  background: #292929;
+  color: #ffffff;
+}
+
+/* Active navigation */
+body.dark-mode .side-nav a.active {
+  background: #ffffff;
+  color: #111111;
+}
+
+/* Form inputs */
+body.dark-mode input,
+body.dark-mode textarea,
+body.dark-mode select {
+  background: #222222;
+  color: #ffffff;
+  border-color: #444444;
+}
+
+/* Small sidebar headings */
+body.dark-mode .nav-title {
+  color: #777777;
+}
+
+/* Profile subtitle */
+body.dark-mode .profile p {
+  color: #888888;
+}
+
+
+
+
+
+/* =========================
+   REMOVE HOME SEARCH BAR
+========================= */
+
+.search-box {
+  display: none !important;
 }
