@@ -15,7 +15,12 @@ const app = express();
 // MIDDLEWARE
 // ========================================
 
-app.use(cors());
+app.use(cors(
+  {
+    origin: "https://ibm-internship-final-project-frontend-j6y0.onrender.com",
+    credentials: true
+  }
+));
 
 app.use(express.json({ limit: "5mb" }));
 
