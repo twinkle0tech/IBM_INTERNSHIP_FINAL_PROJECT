@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 
 
 const API_URL =
-  "http://localhost:5000";
+  "https://ibm-internship-final-project.onrender.com";
 
 
 function Assignments() {
