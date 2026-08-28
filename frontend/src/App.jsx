@@ -16,12 +16,8 @@ import Settings from "./pages/Settings";
 
 import "./App.css";
 
-
-<<<<<<< HEAD
 const API_URL = import.meta.env.VITE_API_URL;
-=======
-const API_URL = "https://ibm-internship-final-project-2.onrender.com";
->>>>>>> 554a8616535eb4b74d9db65d7043edbf1e2cf219
+
 
 
 // Get saved user safely
