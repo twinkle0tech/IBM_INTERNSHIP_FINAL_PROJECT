@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const API_URL = "https://ibm-internship-final-project.onrender.com";
+const API_URL = "https://ibm-internship-final-project-2.onrender.com";
 
 function Login({ onLogin, goToRegister }) {
   const [email, setEmail] = useState("");
