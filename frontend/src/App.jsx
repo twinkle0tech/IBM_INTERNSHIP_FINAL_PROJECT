@@ -17,7 +17,7 @@ import Settings from "./pages/Settings";
 import "./App.css";
 
 
-const API_URL = "https://ibm-internship-final-project.onrender.com";
+const API_URL = "https://ibm-internship-final-project-2.onrender.com";
 
 
 // Get saved user safely
